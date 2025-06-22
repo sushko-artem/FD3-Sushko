@@ -1,0 +1,16 @@
+{
+  "name": "ishop0",
+  "version": "1.0.0",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "FD3-Sushko"
+  },
+  "license": "ISC",
+  "author": "Sushko Artem",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
