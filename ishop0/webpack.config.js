@@ -1,13 +1,12 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-module.exports = {
+const config = {
   entry: "./src/index.js",
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "dist"),
   },
-  devtool: "source-map",
   devServer: {
     compress: true,
     port: 3000,
@@ -34,4 +33,11 @@ module.exports = {
       template: "./src/index.html",
     }),
   ],
+};
+
+module.exports = (env, argv) => {
+  const isDevelop =
+    argv.mode === "production" ? false : "eval-cheap-module-source-map";
+  config.devtool = isDevelop;
+  return config;
 };
