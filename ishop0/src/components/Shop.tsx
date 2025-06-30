@@ -1,6 +1,7 @@
 import React, { Component } from "react";
+import { IShopProps } from "../shared/interfaces";
 
-export default class Shop extends Component {
+export default class Shop extends Component<IShopProps> {
   render() {
     return (
       <header className="text-center mt-2">
