@@ -1,18 +1,25 @@
 import React, { Component } from "react";
-import { IShopProps } from "../shared/interfaces";
+import { IShopProps } from "@interfaces/shop.props";
+import Head from "@components/Head";
+import Product from "@components/Product";
 
 export default class Shop extends Component<IShopProps> {
-  render() {
+  render(): React.ReactNode {
     return (
-      <header className="text-center mt-2">
-        <h1 className="bg-head-gradient bg-clip-text text-transparent text-6xl font-extrabold">
-          {this.props.name}
-        </h1>
-        <div className="border-[1px] border-cyan-300 w-[130px] m-auto"></div>
-        <span className="text-amber-100 font-bold text-sm">
-          {this.props.address}
-        </span>
-      </header>
+      <>
+        <Head name={this.props.name} address={this.props.address} />
+        <main className="mt-4 grid gap-2">
+          {this.props.products.map((item) => (
+            <Product
+              key={item.id}
+              productName={item.productName}
+              price={item.price}
+              photoURL={item.photoURL}
+              count={item.count}
+            />
+          ))}
+        </main>
+      </>
     );
   }
 }

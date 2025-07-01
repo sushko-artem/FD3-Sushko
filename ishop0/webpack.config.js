@@ -1,15 +1,23 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 const config = {
   entry: "./src/index.tsx",
   output: {
+    publicPath: "/",
     filename: "bundle.js",
     path: path.resolve(__dirname, "dist"),
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".jsx"],
+    alias: {
+      "@components": path.resolve(__dirname, "src/components"),
+      "@interfaces": path.resolve(__dirname, "src/shared/interfaces"),
+      "@constants": path.resolve(__dirname, "src/shared/constants"),
+      "@helpers": path.resolve(__dirname, "src/shared/Libs/helpers"),
+    },
   },
   devServer: {
     compress: true,
@@ -37,6 +45,15 @@ const config = {
       template: "./src/index.html",
     }),
     new ForkTsCheckerWebpackPlugin(),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: "public",
+          to: ".",
+          noErrorOnMissing: true,
+        },
+      ],
+    }),
   ],
 };
 

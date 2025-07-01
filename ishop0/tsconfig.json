@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "baseUrl": "./src",
     "target": "ES5",
     "module": "ESNext",
     "jsx": "preserve",
@@ -7,7 +10,13 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "@components/*": ["components/*"],
+      "@interfaces/*": ["shared/interfaces/*"],
+      "@constants/*": ["shared/constants/*"],
+      "@helpers/*": ["shared/Libs/helpers/*"]
+    }
   },
   "include": ["src"]
 }
