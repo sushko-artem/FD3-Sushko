@@ -4,10 +4,25 @@ import { currencyEUR } from "@helpers/euro-currency";
 
 type ProductType = IShopProps["products"][number];
 
-export default class Product extends Component<ProductType> {
+type AdditionalTypes = {
+  setIsActive: (id: string) => void;
+  isActive: boolean;
+};
+
+type ProductTypeProps = ProductType & AdditionalTypes;
+
+export default class Product extends Component<ProductTypeProps> {
+  setIsActive = () => {
+    this.props.setIsActive(this.props.id);
+  };
   render(): React.ReactNode {
     return (
-      <section className="justify-around xs:flex w-[95%] sm:w-[90%] md:w-[90%] lg:w-[70%] xs:h-28 border-2 border-cyan-300 rounded-lg m-auto hover:scale-105 hover:shadow-lg hover:shadow-slate-700 cursor-pointer transition-all">
+      <section
+        onClick={this.setIsActive}
+        className={`${
+          this.props.isActive ? "bg-blue-600" : null
+        } justify-around xs:flex w-[95%] sm:w-[90%] md:w-[90%] lg:w-[70%] xs:h-28 border-2 border-cyan-300 rounded-lg m-auto hover:scale-105 hover:shadow-lg hover:shadow-slate-700 cursor-pointer transition-all`}
+      >
         <div className="flex xs:flex-col align-middle justify-center">
           <img
             src={this.props.photoURL}
