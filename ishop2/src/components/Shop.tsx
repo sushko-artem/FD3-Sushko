@@ -4,42 +4,36 @@ import { IShopProps } from "@interfaces/shop.props";
 import Head from "@components/Head";
 import Product from "@components/Product";
 
-type ProductsType = IShopProps["products"][number] & { isActive: boolean };
+type ProductsType = IShopProps["products"][number];
 type ShopStateType = {
   products: ProductsType[];
   isModalOpen: boolean;
-  elementId: string | null;
+  activeElement: string | null;
+  removedElement: string | null;
 };
 
 const modalText = "Do You really want to remove this item?";
 
 export default class Shop extends Component<IShopProps, ShopStateType> {
   state: ShopStateType = {
-    products: this.props.products.map((product) => ({
-      ...product,
-      isActive: false,
-    })),
+    products: this.props.products,
     isModalOpen: false,
-    elementId: null,
+    activeElement: null,
+    removedElement: null,
   };
 
   private deleteItem() {
     this.setState((prevState) => ({
       products: prevState.products.filter(
-        (product) => product.id !== prevState.elementId
+        (product) => product.id !== prevState.removedElement
       ),
       isModalOpen: !prevState.isModalOpen,
-      elementId: null,
+      removedElement: null,
     }));
   }
 
   setIsActive = (id: string) => {
-    this.setState({
-      products: this.state.products.map((product) => ({
-        ...product,
-        isActive: product.id === id,
-      })),
-    });
+    this.setState({ activeElement: id });
   };
 
   confirmAction = (res: boolean) => {
@@ -53,12 +47,12 @@ export default class Shop extends Component<IShopProps, ShopStateType> {
   handleRequestConfirm = (id: string) => {
     this.setState((prevState) => ({
       isModalOpen: !prevState.isModalOpen,
-      elementId: id,
+      removedElement: id,
     }));
   };
 
   render(): React.ReactNode {
-    const { isModalOpen } = this.state;
+    const { isModalOpen, activeElement } = this.state;
     return (
       <>
         {isModalOpen && (
@@ -71,6 +65,7 @@ export default class Shop extends Component<IShopProps, ShopStateType> {
         <main className="mt-4 grid gap-2">
           {this.state.products.map((item) => (
             <Product
+              isActive={activeElement}
               handleRequestConfirm={this.handleRequestConfirm}
               setIsActive={this.setIsActive}
               key={item.id}

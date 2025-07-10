@@ -7,7 +7,7 @@ type ProductType = IShopProps["products"][number];
 type AdditionalType = {
   handleRequestConfirm: (id: string) => void;
   setIsActive: (id: string) => void;
-  isActive: boolean;
+  isActive: string | null;
 };
 
 type ProductPropsType = ProductType & AdditionalType;
@@ -28,7 +28,7 @@ export default class Product extends Component<ProductPropsType> {
       <section
         onClick={this.setIsActive}
         className={`${
-          isActive
+          isActive === this.props.id
             ? "bg-blue-600 scale-105 shadow-lg shadow-slate-700 transition-all"
             : null
         } relative justify-around xs:flex w-[95%] sm:w-[90%] md:w-[90%] lg:w-[70%] xs:h-28 border-2 border-cyan-300 rounded-lg m-auto cursor-pointer transition-all`}
