@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "baseUrl": "./src",
+    "lib": ["es2023", "dom"],
+    "target": "es2022",
+    "module": "ESNext",
+    "jsx": "preserve",
+    "strict": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "@components/*": ["components/*"],
+      "@interfaces/*": ["shared/interfaces/*"],
+      "@constants/*": ["shared/constants/*"],
+      "@helpers/*": ["shared/Libs/helpers/*"]
+    }
+  },
+  "include": ["src"]
+}
