@@ -5,7 +5,7 @@ type FilterPropsType = {
 };
 
 type FilterStateType = {
-  curentlList: string[];
+  currentList: string[];
   currentInputValue: string;
   isSorted: boolean;
 };
@@ -14,30 +14,53 @@ export default class Filter extends Component<
   FilterPropsType,
   FilterStateType
 > {
-  private list = this.props.list;
+  list = this.props.list;
 
   state = {
-    curentlList: this.list,
+    currentList: this.list,
     currentInputValue: "",
     isSorted: false,
   };
 
-  filterList = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({
-      curentlList: this.list.filter((item) => item.includes(e.target.value)),
-      currentInputValue: e.target.value,
+  private filter = (list: string[], stringValue: string) => {
+    return list.filter((item) => item.includes(stringValue));
+  };
+
+  private filterSortHandler = (
+    isSorted: boolean,
+    currentInputValue: string
+  ) => {
+    this.setState((prevState) => {
+      let currentList = this.list;
+      if (isSorted) {
+        if (currentInputValue) {
+          currentList = this.filter(currentList, currentInputValue).toSorted();
+        } else {
+          currentList = currentList.toSorted();
+        }
+      } else {
+        if (!currentInputValue) {
+          currentList = currentList;
+        } else {
+          currentList = this.filter(currentList, currentInputValue);
+        }
+      }
+      return { currentList, currentInputValue, isSorted };
     });
   };
 
-  sortList = () => {
-    this.setState((prevState) => ({
-      isSorted: !prevState.isSorted,
-    }));
+  handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    this.filterSortHandler(this.state.isSorted, e.target.value);
   };
 
-  reset = () => {
+  handleCheckbox = () => {
+    this.filterSortHandler(!this.state.isSorted, this.state.currentInputValue);
+  };
+
+  handleReset = () => {
+    if (!this.state.isSorted && !this.state.currentInputValue) return;
     this.setState({
-      curentlList: this.list,
+      currentList: this.list,
       currentInputValue: "",
       isSorted: false,
     });
@@ -46,13 +69,12 @@ export default class Filter extends Component<
   changeView = () => {};
 
   render(): React.ReactNode {
-    const { curentlList, isSorted, currentInputValue } = this.state;
-    const sortedList = curentlList.toSorted();
+    const { currentList, isSorted, currentInputValue } = this.state;
     return (
       <div className="m-auto">
         <div className="flex justify-around">
           <input
-            onChange={this.sortList}
+            onChange={this.handleCheckbox}
             checked={isSorted}
             className="w-4 accent-slate-400"
             type="checkbox"
@@ -60,13 +82,13 @@ export default class Filter extends Component<
             id="sorting"
           />
           <input
-            onChange={this.filterList}
+            onChange={this.handleInput}
             value={currentInputValue}
             className="border-2 rounded-sm outline-slate-400 ml-2"
             type="text"
           />
           <button
-            onClick={this.reset}
+            onClick={this.handleReset}
             className="py-[0.5] px-2 border-2 rounded-md border-slate-300 ml-2 active:bg-slate-400 hover:bg-slate-200 transition-all"
             type="reset"
           >
@@ -81,7 +103,7 @@ export default class Filter extends Component<
             id="list"
             rows={7}
             cols={30}
-            value={isSorted ? sortedList.join("\n") : curentlList.join("\n")}
+            value={currentList.join("\n")}
           ></textarea>
         </div>
       </div>
