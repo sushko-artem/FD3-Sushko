@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+@theme {
+  --breakpoint-xs: 400px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --animate-appearing: appearing 0.3s ease-in-out alternate;
+  --animate-blure: blure 0.3s ease-in-out alternate;
+  @keyframes appearing {
+    0% {
+      transform: scale(0);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  @keyframes blure {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+}
+
+body {
+  background: linear-gradient(
+    90deg,
+    #29d6d4,
+    #00b7e1,
+    #0093e3,
+    #3068cd,
+    #77309a
+  );
+}
