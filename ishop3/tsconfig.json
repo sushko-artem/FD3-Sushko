@@ -25,11 +25,11 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "paths": {
-      "@/*": ["src/*"],
       "@components/*": ["components/*"],
+      "@shared/*": ["shared/*"],
       "@interfaces/*": ["shared/interfaces/*"],
       "@constants/*": ["shared/constants/*"],
-      "@helpers/*": ["shared/Libs/helpers/*"],
+      "@helpers/*": ["shared/lib/helpers/*"],
       "@assets/*": ["assets/*"]
     }
   },

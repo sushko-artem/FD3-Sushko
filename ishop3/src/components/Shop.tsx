@@ -3,13 +3,17 @@ import ModalConfirm from "@components/ModalConfirm";
 import type { IShopProps } from "@interfaces/shop.props";
 import Head from "@components/Head";
 import Product from "@components/Product";
+import ProductCard from "./ProductCard";
+import EditForm from "./EditForm";
 
 type ProductsType = IShopProps["products"][number];
 type ShopStateType = {
   products: ProductsType[];
-  isModalOpen: boolean;
+  product: ProductsType | null;
   activeElement: string | null;
   removedElement: string | null;
+  isModalOpen: boolean;
+  isEditFormOpen: boolean;
 };
 
 const modalText = "Do You really want to remove this item?";
@@ -17,9 +21,11 @@ const modalText = "Do You really want to remove this item?";
 export default class Shop extends Component<IShopProps, ShopStateType> {
   state: ShopStateType = {
     products: this.props.products,
-    isModalOpen: false,
+    product: null,
     activeElement: null,
     removedElement: null,
+    isModalOpen: false,
+    isEditFormOpen: false,
   };
 
   private deleteItem() {
@@ -29,11 +35,33 @@ export default class Shop extends Component<IShopProps, ShopStateType> {
       ),
       isModalOpen: !prevState.isModalOpen,
       removedElement: null,
+      activeElement:
+        prevState.activeElement === prevState.removedElement
+          ? null
+          : prevState.activeElement,
+      isEditFormOpen:
+        prevState.activeElement === prevState.removedElement ? false : true,
     }));
   }
 
-  setIsActive = (id: string) => {
-    this.setState({ activeElement: id });
+  setIsEdit = () => {};
+
+  setIsActive = (id: string, isEditFormOpen: boolean) => {
+    const { productName, price, photoURL, count } = this.state.products.find(
+      (item) => item.id === id
+    ) as ProductsType;
+    const productData = {
+      id,
+      productName,
+      price,
+      photoURL,
+      count,
+    };
+    this.setState({
+      activeElement: id,
+      product: { ...productData },
+      isEditFormOpen,
+    });
   };
 
   confirmAction = (res: boolean) => {
@@ -54,7 +82,7 @@ export default class Shop extends Component<IShopProps, ShopStateType> {
   };
 
   render(): React.ReactNode {
-    const { isModalOpen, activeElement } = this.state;
+    const { isModalOpen, activeElement, product, isEditFormOpen } = this.state;
     return (
       <>
         {isModalOpen && (
@@ -75,6 +103,8 @@ export default class Shop extends Component<IShopProps, ShopStateType> {
             />
           ))}
         </main>
+        {activeElement && !isEditFormOpen && <ProductCard {...product!} />}
+        {isEditFormOpen && <EditForm {...product!}></EditForm>}
       </>
     );
   }

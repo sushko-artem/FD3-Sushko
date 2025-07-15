@@ -8,7 +8,7 @@ type ProductType = IShopProps["products"][number];
 
 type AdditionalType = {
   handleRequestConfirm: (id: string) => void;
-  setIsActive: (id: string) => void;
+  setIsActive: (id: string, isEdit: boolean) => void;
   isActive: string | null;
 };
 
@@ -16,7 +16,12 @@ type ProductPropsType = ProductType & AdditionalType;
 
 export default class Product extends Component<ProductPropsType> {
   setIsActive = () => {
-    this.props.setIsActive(this.props.id);
+    this.props.setIsActive(this.props.id, false);
+  };
+
+  setIsEdit = (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    this.props.setIsActive(this.props.id, true);
   };
 
   handleRequestConfirm = (e: React.MouseEvent<HTMLElement>) => {
@@ -30,7 +35,7 @@ export default class Product extends Component<ProductPropsType> {
       <section
         onClick={this.setIsActive}
         className={`${
-          isActive === this.props.id
+          isActive === id
             ? "bg-blue-600 scale-105 shadow-lg shadow-slate-700 transition-all"
             : null
         } relative justify-around xs:flex w-[95%] sm:w-[90%] md:w-[90%] lg:w-[70%] xs:h-28 border-2 border-cyan-300 rounded-lg m-auto cursor-pointer transition-all`}
@@ -47,7 +52,10 @@ export default class Product extends Component<ProductPropsType> {
             width={100}
           />
         </div>
-        <div className="w-4 h-4 absolute right-2 bottom-2 hover:scale-125 transition-all">
+        <div
+          onClick={this.setIsEdit}
+          className="w-4 h-4 absolute right-2 bottom-2 hover:scale-125 transition-all"
+        >
           <img
             className="bg-inherit"
             src={edit}
