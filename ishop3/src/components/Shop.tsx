@@ -44,8 +44,6 @@ export default class Shop extends Component<IShopProps, ShopStateType> {
     }));
   }
 
-  setIsEdit = () => {};
-
   setIsActive = (id: string, isEditFormOpen: boolean) => {
     const { productName, price, photoURL, count } = this.state.products.find(
       (item) => item.id === id
@@ -81,6 +79,22 @@ export default class Shop extends Component<IShopProps, ShopStateType> {
     }));
   };
 
+  setIsEditFormOpen = () => {
+    this.setState({
+      isEditFormOpen: false,
+      activeElement: null,
+    });
+  };
+
+  saveChanges = (data: ProductsType) => {
+    this.setState((prevState) => {
+      const products = prevState.products.map((item) =>
+        item.id === data.id ? (item = data) : item
+      );
+      return { products };
+    });
+  };
+
   render(): React.ReactNode {
     const { isModalOpen, activeElement, product, isEditFormOpen } = this.state;
     return (
@@ -104,7 +118,13 @@ export default class Shop extends Component<IShopProps, ShopStateType> {
           ))}
         </main>
         {activeElement && !isEditFormOpen && <ProductCard {...product!} />}
-        {isEditFormOpen && <EditForm {...product!}></EditForm>}
+        {isEditFormOpen && (
+          <EditForm
+            saveChanges={this.saveChanges}
+            closeForm={this.setIsEditFormOpen}
+            product={product!}
+          ></EditForm>
+        )}
       </>
     );
   }

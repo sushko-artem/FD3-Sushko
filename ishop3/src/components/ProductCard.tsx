@@ -1,6 +1,6 @@
 import type { IShopProps } from "@shared/interfaces/shop.props";
 import React, { Component } from "react";
-import CardLayout from "ui/product-card-layout";
+import CardLayout from "ui/product-card";
 
 type ProductCardPropsType = IShopProps["products"][number];
 

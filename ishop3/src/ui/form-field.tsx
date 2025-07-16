@@ -5,7 +5,7 @@ import React, { Component } from "react";
 type InputPropsType = [name: string, value: string | number];
 type FormFieldPropsType = {
   input: InputPropsType;
-  onChange: () => void;
+  onChange: (inputValue: string | number, property: string) => void;
 };
 
 export default class FormField extends Component<FormFieldPropsType> {
@@ -19,8 +19,8 @@ export default class FormField extends Component<FormFieldPropsType> {
     }
   };
 
-  onChange = () => {
-    this.props.onChange();
+  onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    this.props.onChange(e.target.value, e.target.id);
   };
 
   render(): React.ReactNode {
