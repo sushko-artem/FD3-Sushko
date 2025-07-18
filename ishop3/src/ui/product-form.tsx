@@ -10,11 +10,12 @@ import FormField from "./form-field";
 import { Button } from "@shared/ui/button";
 
 type ProductFormPropsType = {
-  inputFields: Array<[string, string | number]>;
+  inputFields: Array<[string, string | number, string?]>;
   title: string;
   buttonText: string;
   id: string;
   productName?: string;
+  isValid: boolean;
   onChange: (inputValue: string | number, property: string) => void;
   saveChanges: () => void;
   cancel: () => void;
@@ -31,9 +32,10 @@ export default class ProductForm extends Component<ProductFormPropsType> {
     this.props.cancel();
   };
   render(): React.ReactNode {
-    const { id, productName, title, inputFields } = this.props;
+    const { id, productName, title, inputFields, isValid, buttonText } =
+      this.props;
     return (
-      <div className="mt-4 max-w-2xs mx-auto">
+      <div className="mt-4 max-w-2xs mx-auto animate-slide-up">
         <Card className="bg-blue-200 p-2 gap-2">
           <CardHeader className="text-center">
             <h1 className="text-xl font-extrabold">
@@ -56,16 +58,18 @@ export default class ProductForm extends Component<ProductFormPropsType> {
           </CardContent>
           <CardFooter className="flex justify-around mt-3">
             <Button
+              disabled={!isValid}
               type="button"
               onClick={this.saveChanges}
-              className="bg-cyan-600 hover:bg-cyan-700 w-[40%] active:bg-cyan-600"
+              className="bg-cyan-600 hover:bg-cyan-700 w-[40%] active:bg-cyan-600 cursor-pointer"
             >
-              {this.props.buttonText}
+              {buttonText}
             </Button>
+
             <Button
               type="button"
               onClick={this.cancel}
-              className="bg-cyan-600 hover:bg-cyan-700 w-[40%] active:bg-cyan-600"
+              className="bg-cyan-600 hover:bg-cyan-700 w-[40%] active:bg-cyan-600 cursor-pointer"
             >
               Cancel
             </Button>

@@ -9,7 +9,7 @@ export default class CardLayout extends Component<CardPropsType> {
   render(): React.ReactNode {
     const { productName, id, photoURL, count, price } = this.props;
     return (
-      <div className="mt-4 max-w-2xs mx-auto">
+      <div className="mt-4 max-w-2xs mx-auto animate-appearing">
         <Card className="bg-blue-200 p-2 gap-2">
           <CardHeader className="text-center">
             <h1 className="text-2xl font-extrabold text-fuchsia-700">
@@ -24,8 +24,10 @@ export default class CardLayout extends Component<CardPropsType> {
               alt={productName}
               width={60}
             />
-            <span className="mb-1 mt-1">count: {count}</span>
-            <span>price: {currencyEUR(price as number)}</span>
+            <span className="mb-1 mt-1">
+              count: {count > 0 ? count : "out of stock"}
+            </span>
+            <span>price: {price > 0 ? currencyEUR(price) : "free!"}</span>
           </CardContent>
         </Card>
       </div>

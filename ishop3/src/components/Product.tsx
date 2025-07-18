@@ -8,20 +8,34 @@ type ProductType = IShopProps["products"][number];
 
 type AdditionalType = {
   handleRequestConfirm: (id: string) => void;
-  setIsActive: (id: string, isEdit: boolean) => void;
+  setIsEdit: (id: string, isEdit: boolean) => void;
   isActive: string | null;
+  isVisible: boolean;
 };
 
 type ProductPropsType = ProductType & AdditionalType;
 
 export default class Product extends Component<ProductPropsType> {
+  state = {
+    isVisible: this.props.isVisible,
+  };
+
+  componentDidUpdate(prevProps: ProductPropsType): void {
+    if (prevProps.isVisible !== this.props.isVisible) {
+      this.setState({
+        isVisible: this.props.isVisible,
+      });
+    }
+  }
+
   setIsActive = () => {
-    this.props.setIsActive(this.props.id, false);
+    if (this.state.isVisible) return;
+    this.props.setIsEdit(this.props.id, false);
   };
 
   setIsEdit = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
-    this.props.setIsActive(this.props.id, true);
+    this.props.setIsEdit(this.props.id, true);
   };
 
   handleRequestConfirm = (e: React.MouseEvent<HTMLElement>) => {
@@ -40,30 +54,34 @@ export default class Product extends Component<ProductPropsType> {
             : null
         } relative justify-around xs:flex w-[95%] sm:w-[90%] md:w-[90%] lg:w-[70%] xs:h-28 border-2 border-cyan-300 rounded-lg m-auto cursor-pointer transition-all`}
       >
-        <div
-          onClick={this.handleRequestConfirm}
-          className="w-4 h-4 absolute top-2 right-2 hover:scale-125 transition-all"
-        >
-          <img
-            data-id={id}
-            src={cross}
-            alt="close"
-            title="remove this item"
-            width={100}
-          />
-        </div>
-        <div
-          onClick={this.setIsEdit}
-          className="w-4 h-4 absolute right-2 bottom-2 hover:scale-125 transition-all"
-        >
-          <img
-            className="bg-inherit"
-            src={edit}
-            title="edit product"
-            alt="edit"
-            width={100}
-          />
-        </div>
+        {!this.state.isVisible && (
+          <>
+            <div
+              onClick={this.handleRequestConfirm}
+              className="w-4 h-4 absolute top-2 right-2 hover:scale-125 transition-all"
+            >
+              <img
+                data-id={id}
+                src={cross}
+                alt="close"
+                title="remove this item"
+                width={100}
+              />
+            </div>
+            <div
+              onClick={this.setIsEdit}
+              className="w-4 h-4 absolute right-2 bottom-2 hover:scale-125 transition-all"
+            >
+              <img
+                className="bg-inherit"
+                src={edit}
+                title="edit product"
+                alt="edit"
+                width={100}
+              />
+            </div>
+          </>
+        )}
         <div className="flex xs:flex-col align-middle justify-center">
           <img src={photoURL} alt={productName} width={100} />
         </div>
@@ -73,11 +91,13 @@ export default class Product extends Component<ProductPropsType> {
         </div>
         <div className="flex xs:flex-col justify-center text-center">
           <span className="font-serif mr-1">available:</span>
-          <span className="text-gray-200 font-bold">{count}</span>
+          <span className="text-gray-200 font-bold">
+            {count > 0 ? count : "out of stock"}
+          </span>
         </div>
         <div className="flex xs:flex-col justify-center">
           <span className="text-yellow-300 font-bold text-base">
-            {currencyEUR(price)}
+            {price > 0 ? currencyEUR(price) : "free!"}
           </span>
         </div>
       </section>
