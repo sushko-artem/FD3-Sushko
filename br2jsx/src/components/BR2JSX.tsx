@@ -1,7 +1,7 @@
 import React from "react";
 
 export default class BR2JSX extends React.Component<{ text: string }> {
-  textHandler = () =>
+  getJSXfromText = () =>
     this.props.text
       .replace(/<\w+[ *\\/]*>/g, ",")
       .split(",")
@@ -15,7 +15,7 @@ export default class BR2JSX extends React.Component<{ text: string }> {
   render(): React.ReactNode {
     return (
       <div className="bg-amber-200 font-bold w-fit text-center mx-auto p-5">
-        {this.textHandler()}
+        {this.getJSXfromText()}
       </div>
     );
   }
