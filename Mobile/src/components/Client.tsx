@@ -1,13 +1,17 @@
+import React from "react";
 import type { IClients } from "@shared/interfaces/cilents-interface";
 import { Button } from "@shared/ui/button";
 import { TableCell, TableRow } from "@shared/ui/table";
-import React from "react";
+import { emitter } from "@shared/events/emitter";
 
 type ClientPropsType = {
   info: IClients["clients"][number];
 };
 
 export default class Client extends React.PureComponent<ClientPropsType> {
+  delete = () => {
+    emitter.emit("delete", this.props.info.id);
+  };
   render(): React.ReactNode {
     const { lastName, firstName, secondName, balance } = this.props.info;
     const status = balance < 0;
@@ -24,24 +28,21 @@ export default class Client extends React.PureComponent<ClientPropsType> {
           {status ? "Blocked" : "Active"}
         </TableCell>
         <TableCell>
-          {
-            <Button
-              className="hover:bg-gray-300 active:bg-gray-400 cursor-pointer transition-all"
-              variant="secondary"
-            >
-              Edit
-            </Button>
-          }
+          <Button
+            className="hover:bg-gray-300 active:bg-gray-400 cursor-pointer transition-all"
+            variant="secondary"
+          >
+            Edit
+          </Button>
         </TableCell>
         <TableCell>
-          {
-            <Button
-              className="hover:bg-gray-300 active:bg-gray-400 cursor-pointer transition-all"
-              variant="secondary"
-            >
-              Delete
-            </Button>
-          }
+          <Button
+            className="hover:bg-gray-300 active:bg-gray-400 cursor-pointer transition-all"
+            variant="secondary"
+            onClick={this.delete}
+          >
+            Delete
+          </Button>
         </TableCell>
       </TableRow>
     );

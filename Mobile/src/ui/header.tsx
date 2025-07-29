@@ -13,7 +13,6 @@ const tableHeader = [
 
 export default class Header extends React.PureComponent {
   render(): React.ReactNode {
-    console.log("render Head");
     return (
       <TableHeader>
         <TableRow>

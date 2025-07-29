@@ -1,17 +1,14 @@
-import { Button } from "@shared/ui/button";
 import React from "react";
+import { Button } from "@shared/ui/button";
 import { emitter } from "@shared/events/emitter";
 
-export default class FilterGroup extends React.PureComponent {
-  state = {
-    isActive: "all",
-  };
+type FilterGroupPropsType = {
+  filter: "all" | "blocked" | "active";
+};
 
+export default class FilterGroup extends React.PureComponent<FilterGroupPropsType> {
   handleClick = (e: React.MouseEvent<HTMLElement>) => {
     emitter.emit("filter", e.currentTarget.id);
-    this.setState({
-      isActive: e.currentTarget.id,
-    });
   };
 
   render(): React.ReactNode {
@@ -21,7 +18,7 @@ export default class FilterGroup extends React.PureComponent {
           id="all"
           onClick={this.handleClick}
           className={`${
-            this.state.isActive === "all"
+            this.props.filter === "all"
               ? "bg-red-500 text-white hover:bg-red-500 hover:text-white"
               : null
           } mr-1 mb-1 cursor-pointer transition-all`}
@@ -33,7 +30,7 @@ export default class FilterGroup extends React.PureComponent {
           id="active"
           onClick={this.handleClick}
           className={`${
-            this.state.isActive === "active"
+            this.props.filter === "active"
               ? "bg-red-500 text-white hover:bg-red-500 hover:text-white"
               : null
           } mr-1 mb-1 cursor-pointer transition-all`}
@@ -45,7 +42,7 @@ export default class FilterGroup extends React.PureComponent {
           id="blocked"
           onClick={this.handleClick}
           className={`${
-            this.state.isActive === "blocked"
+            this.props.filter === "blocked"
               ? "bg-red-500 text-white hover:bg-red-500 hover:text-white"
               : null
           } mr-1 mb-1 cursor-pointer transition-all`}

@@ -1,14 +1,22 @@
-import { Table, TableBody, TableCaption } from "@shared/ui/table";
 import React from "react";
+import { Table, TableBody, TableCaption } from "@shared/ui/table";
 import Header from "ui/header";
 import FilterGroup from "./FilterGroup";
 import type { IClients } from "@shared/interfaces/cilents-interface";
 import Client from "./Client";
 import { emitter } from "@shared/events/emitter";
+import memoize from "memoizee";
 
-export default class Mobile extends React.PureComponent<IClients> {
-  state = {
-    clients: this.props.clients,
+type MobileStateType = {
+  filter: "all" | "blocked" | "active";
+};
+
+export default class Mobile extends React.PureComponent<
+  IClients,
+  MobileStateType
+> {
+  state: MobileStateType = {
+    filter: "all",
   };
 
   componentDidMount(): void {
@@ -19,38 +27,37 @@ export default class Mobile extends React.PureComponent<IClients> {
     emitter.off("filter", this.filter);
   }
 
-  filter = (id: string) => {
-    if (id === "active") {
-      const clients = this.props.clients.filter((i) => i.balance > 0);
-      if (this.state.clients.some((item) => item.balance < 0)) {
-        this.setState({
-          clients,
-        });
-      }
-    } else if (id === "blocked") {
-      const clients = this.props.clients.filter((i) => i.balance < 0);
-      if (this.state.clients.some((item) => item.balance > 0)) {
-        this.setState({
-          clients,
-        });
-      }
-    } else {
-      this.setState({
-        clients: this.props.clients,
-      });
-    }
+  filter = (filter: "all" | "blocked" | "active") => {
+    this.setState({ filter });
   };
+
+  getFilteredClients = memoize(
+    (clients: IClients["clients"], filter: "all" | "blocked" | "active") => {
+      switch (filter) {
+        case "active":
+          return clients.filter((item) => item.balance >= 0);
+        case "blocked":
+          return clients.filter((item) => item.balance < 0);
+        default:
+          return clients;
+      }
+    }
+  );
 
   render(): React.ReactNode {
     console.log("render Mobile");
+    const filteredClients = this.getFilteredClients(
+      this.props.clients,
+      this.state.filter
+    );
     return (
       <>
-        <FilterGroup />
+        <FilterGroup filter={this.state.filter} />
         <Table>
           <TableCaption>A list of Mobile clients.</TableCaption>
           <Header />
           <TableBody>
-            {this.state.clients.map((item) => (
+            {filteredClients.map((item) => (
               <Client key={item.id} info={item} />
             ))}
           </TableBody>
