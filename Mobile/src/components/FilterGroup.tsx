@@ -12,6 +12,7 @@ export default class FilterGroup extends React.PureComponent<FilterGroupPropsTyp
   };
 
   render(): React.ReactNode {
+    console.log("render FilterGroup");
     return (
       <div className="mt-4 mb-1">
         <Button

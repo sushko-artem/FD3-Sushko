@@ -8,29 +8,31 @@ type ClientPropsType = {
   info: IClients["clients"][number];
   isEdit: boolean;
 };
-
 export default class Client extends React.PureComponent<ClientPropsType> {
   lastNameRef = createRef<HTMLInputElement>();
   firstNameRef = createRef<HTMLInputElement>();
   secondNameRef = createRef<HTMLInputElement>();
   balanceRef = createRef<HTMLInputElement>();
+
   delete = () => {
     emitter.emit("delete", this.props.info.id);
   };
+
   edit = () => {
     if (!this.props.isEdit) {
       emitter.emit("edit", this.props.info.id);
     } else {
-      // const editedClient = {
-      //   id: this.props.info.id,
-      //   lastName: this.lastNameRef.current?.value,
-      //   firstName: this.firstNameRef.current?.value,
-      //   secondName: this.secondNameRef.current?.value,
-      //   balance: this.balanceRef.current?.value,
-      // }
-      console.log(this.balanceRef.current?.value);
+      const editedClient = {
+        id: this.props.info.id,
+        lastName: this.lastNameRef.current?.value,
+        firstName: this.firstNameRef.current?.value,
+        secondName: this.secondNameRef.current?.value,
+        balance: this.balanceRef.current?.value,
+      };
+      emitter.emit("edit", editedClient);
     }
   };
+
   render(): React.ReactNode {
     const { lastName, firstName, secondName, balance } = this.props.info;
     const status = balance < 0;
