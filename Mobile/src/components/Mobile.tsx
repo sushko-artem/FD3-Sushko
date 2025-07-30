@@ -9,6 +9,7 @@ import memoize from "memoizee";
 
 type MobileStateType = {
   filter: "all" | "blocked" | "active";
+  editedClientId: string | null;
 };
 
 export default class Mobile extends React.PureComponent<
@@ -17,18 +18,27 @@ export default class Mobile extends React.PureComponent<
 > {
   state: MobileStateType = {
     filter: "all",
+    editedClientId: null,
   };
 
   componentDidMount(): void {
     emitter.on("filter", this.filter);
+    emitter.on("edit", this.edit);
   }
 
   componentWillUnmount(): void {
     emitter.off("filter", this.filter);
+    emitter.off("edit", this.edit);
   }
 
   filter = (filter: "all" | "blocked" | "active") => {
     this.setState({ filter });
+  };
+
+  edit = (id: string) => {
+    this.setState({
+      editedClientId: id,
+    });
   };
 
   getFilteredClients = memoize(
@@ -53,12 +63,16 @@ export default class Mobile extends React.PureComponent<
     return (
       <>
         <FilterGroup filter={this.state.filter} />
-        <Table>
+        <Table className="md:table-fixed">
           <TableCaption>A list of Mobile clients.</TableCaption>
           <Header />
           <TableBody>
             {filteredClients.map((item) => (
-              <Client key={item.id} info={item} />
+              <Client
+                isEdit={this.state.editedClientId === item.id}
+                key={item.id}
+                info={item}
+              />
             ))}
           </TableBody>
         </Table>
