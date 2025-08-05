@@ -1,24 +1,28 @@
 type ControlsPropsType = {
   isSorted: boolean;
   value: string;
-  filterSortHandler: (action: boolean | string) => void;
+  filterHandler: (value: string) => void;
+  sortHandler: (value: boolean) => void;
+  reset: () => void;
 };
 
 export const Controls = ({
   isSorted,
   value,
-  filterSortHandler,
+  filterHandler,
+  sortHandler,
+  reset,
 }: ControlsPropsType) => {
   const handleSort = (e: React.ChangeEvent<HTMLInputElement>) => {
-    filterSortHandler(e.target.checked);
+    sortHandler(e.target.checked);
   };
 
   const handleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    filterSortHandler(e.target.value);
+    filterHandler(e.target.value);
   };
 
   const handleReset = () => {
-    filterSortHandler("reset");
+    reset();
   };
 
   return (

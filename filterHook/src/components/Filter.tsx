@@ -7,17 +7,20 @@ type FilterPropsType = {
 };
 
 export const Filter = ({ list }: FilterPropsType) => {
-  // const [currentList, setCurrentList] = useState(list);
   const [isSorted, setIsSorted] = useState(false);
   const [currentInputValue, setCurrentInputValue] = useState("");
 
-  const filterSortHandler = (action: boolean | string | "reset") => {
-    if (typeof action === "boolean") {
-      setIsSorted(action);
-    } else if (action === "reset") {
-      setCurrentInputValue("");
-      setIsSorted(false);
-    } else setCurrentInputValue(action);
+  const filterHandler = (value: string) => {
+    setCurrentInputValue(value);
+  };
+
+  const sortHandler = (value: boolean) => {
+    setIsSorted(value);
+  };
+
+  const reset = () => {
+    setCurrentInputValue("");
+    setIsSorted(false);
   };
 
   const getList = useMemo(() => {
@@ -33,23 +36,12 @@ export const Filter = ({ list }: FilterPropsType) => {
     return currentList;
   }, [list, currentInputValue, isSorted]);
 
-  // useEffect(() => {
-  //   let currentList = [...list];
-  //   if (currentInputValue) {
-  //     currentList = currentList.filter((item) =>
-  //       item.includes(currentInputValue)
-  //     );
-  //   }
-  //   if (isSorted) {
-  //     currentList.sort();
-  //   }
-  //   setCurrentList(currentList);
-  // }, [list, currentInputValue, isSorted]);
-
   return (
     <div className="m-auto">
       <Controls
-        filterSortHandler={filterSortHandler}
+        reset={reset}
+        sortHandler={sortHandler}
+        filterHandler={filterHandler}
         isSorted={isSorted}
         value={currentInputValue}
       />
