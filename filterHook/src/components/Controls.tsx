@@ -9,20 +9,22 @@ export const Controls = ({
   value,
   filterSortHandler,
 }: ControlsPropsType) => {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.type === "checkbox") {
-      filterSortHandler(e.target.checked);
-    } else {
-      filterSortHandler(e.target.value);
-    }
+  const handleSort = (e: React.ChangeEvent<HTMLInputElement>) => {
+    filterSortHandler(e.target.checked);
   };
+
+  const handleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
+    filterSortHandler(e.target.value);
+  };
+
   const handleReset = () => {
     filterSortHandler("reset");
   };
+
   return (
     <div className="flex justify-around">
       <input
-        onChange={handleChange}
+        onChange={handleSort}
         className="w-4 accent-slate-400"
         type="checkbox"
         checked={isSorted}
@@ -31,7 +33,7 @@ export const Controls = ({
         className="border rounded-sm outline-slate-400 ml-2 px-1"
         type="text"
         value={value}
-        onChange={handleChange}
+        onChange={handleFilter}
       />
       <button
         className="py-[0.5] px-2 border-2 rounded-md border-slate-300 ml-2 active:bg-slate-400 hover:bg-slate-200 transition-all"
